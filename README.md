@@ -1,0 +1,1 @@
+# Joomla! Framework Skeleton App

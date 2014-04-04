@@ -1,0 +1,21 @@
+{
+    "name": "joomla/skeleton",
+    "description": "A starter app structure for Joomla! Framework applications.",
+    "license": "LGPL-2.1+",
+    "authors": [
+        {
+            "name": "Don Gilbert",
+            "email": "don@electriceasel.com"
+        }
+    ],
+    "require": {
+        "joomla/application": ">=1.1.1",
+        "joomla/di": ">=1.1.1",
+        "joomla/router": "dev-2.0-dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    }
+}
