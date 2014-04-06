@@ -54,15 +54,40 @@ class FrontController extends AbstractWebApplication
 	 */
 	public function registerProviders()
 	{
-		foreach ($this->config->get('providers', array()) as $provider)
+		$providers = $this->getDefaultServiceProviders();
+		$providers += (array) $this->config->get('app.serviceProviders', array());
+
+		foreach ($providers as $provider)
 		{
 			$this->container->registerServiceProvider(new $provider);
 		}
 	}
 
+	/**
+	 * Pre-load all providers found in the /app/Providers/ directory.
+	 *
+	 * @return array
+	 */
+	protected function getDefaultServiceProviders()
+	{
+		$providerClassFiles = (array) glob(APP_ROOT . '/app/Providers/*.php');
+
+		return array_map(
+			function($file) {
+				$className = str_replace(APP_ROOT . '/app/', '', rtrim($file, '.php'));
+
+				return __NAMESPACE__ . '\\' . str_replace('/', '\\', $className);
+			},
+			$providerClassFiles
+		);
+	}
+
 	public function doExecute()
 	{
-		$route = $this->router->parseRoute($this->config->get('uri.route'), $_SERVER['REQUEST_METHOD']);
+		$route = $this->router->parseRoute(
+			$this->config->get('uri.route'),
+			$this->getRequestMethod()
+		);
 
 		if ($route['controller'] instanceof \Closure)
 		{
@@ -85,5 +110,15 @@ class FrontController extends AbstractWebApplication
 		}
 
 		$this->setBody($content);
+	}
+
+	protected function getRequestMethod()
+	{
+		if ($this->config->get('http.allowMethodOverride', false) === true)
+		{
+			return $this->input->get($this->config->get('http.methodOverrideName', '_METHOD'));
+		}
+
+		return $_SERVER['REQUEST_METHOD'];
 	}
 }
