@@ -1,12 +1,13 @@
 <?php
 
 return array(
+	'debug' => false,
 	'app' => array(
-		'serviceProviders' => array()
+		'serviceProviders' => array(),
+		'preloadConfigs' => false
 	),
 	'http' => array(
 		'allowMethodOverride' => true,
 		'methodOverrideName' => '_METHOD'
-	),
-	'debug' => false,
+	)
 );

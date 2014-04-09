@@ -17,9 +17,26 @@ class ConfigProvider implements ServiceProviderInterface
 	{
 		$container->share(
 			'config',
-			function (Container $c)
+			function ()
 			{
-				return new Registry(APP_ROOT . '/etc/config.php');
+				$config = new Registry(APP_ROOT . '/etc/config.php');
+
+				$preloadConfigs = $config->get('app.preloadConfigs', false);
+
+				if ($preloadConfigs !== false)
+				{
+					foreach ((array) $preloadConfigs as $configFile)
+					{
+						if (! is_file(APP_ROOT . '/etc/' . $configFile))
+						{
+							throw new \InvalidArgumentException(sprintf('Invalid config file location: %s.', $configFile));
+						}
+
+						$config->loadArray(APP_ROOT . '/etc/' . $configFile);
+					}
+				}
+
+				return $config;
 			}
 		);
 	}
