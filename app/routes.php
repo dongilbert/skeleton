@@ -1,6 +1,6 @@
 <?php
 
-/** @var \Joomla\Router\Router $router */
+$router = new Joomla\Router\Router;
 
 $router->get('/home', 'App\\Controllers\\HomeController@execute');
 
@@ -12,3 +12,5 @@ $router->get(
 	},
 	array('name' => '[a-zA-Z]+')
 );
+
+return $router;

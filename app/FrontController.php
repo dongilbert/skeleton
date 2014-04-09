@@ -4,7 +4,6 @@ namespace App;
 
 use Joomla\DI\Container;
 use Joomla\Router\Router;
-use Joomla\Registry\Registry;
 use Joomla\Application\AbstractWebApplication;
 
 class FrontController extends AbstractWebApplication
@@ -27,7 +26,6 @@ class FrontController extends AbstractWebApplication
 	public function initialise()
 	{
 		$this->container = new Container;
-		$this->router = new Router;
 
 		$this->registerRoutes();
 		$this->registerProviders();
@@ -37,14 +35,19 @@ class FrontController extends AbstractWebApplication
 	 * Register the application routes.
 	 *
 	 * @return void
+	 * @throws \Exception
 	 */
 	public function registerRoutes()
 	{
-		// The $router variable is available in the routes file.
-		$router = $this->router;
-
 		// Include the routes file.
-		include 'routes.php';
+		$router = include 'routes.php';
+
+		if (! ($router instanceof Router))
+		{
+			throw new \Exception('Your routes file must return an instance of Joomla\\Router\\Router.');
+		}
+
+		$this->router = $router;
 	}
 
 	/**
