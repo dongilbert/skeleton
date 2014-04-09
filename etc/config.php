@@ -4,7 +4,9 @@ return array(
 	'debug' => false,
 	'app' => array(
 		'serviceProviders' => array(),
-		'preloadConfigs' => false
+		'preloadConfigs' => array(
+			'session'
+		)
 	),
 	'http' => array(
 		'allowMethodOverride' => true,

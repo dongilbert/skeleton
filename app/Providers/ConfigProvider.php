@@ -32,7 +32,7 @@ class ConfigProvider implements ServiceProviderInterface
 							throw new \InvalidArgumentException(sprintf('Invalid config file location: %s.', $configFile));
 						}
 
-						$config->loadArray(APP_ROOT . '/etc/' . $configFile);
+						$config->loadArray(include APP_ROOT . '/etc/' . $configFile);
 					}
 				}
 
